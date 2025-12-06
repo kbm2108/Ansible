@@ -15,8 +15,12 @@ ansible -m copy -a "src=hosts dest=/tmp/" all -b
 
 # Changing permissions
 ansible -m file -b -a "dest=/tmp/hosts mode=770 owner=ubuntu group=ubuntu" all
-# package installation
+
+# installing packages
 ansible -m apt -a "name=unzip state=present" -b all
+
+# removing packages
+ansible -m apt  -a "name=nginx state=absent" all -b
 
 # Service starts/restarts
 ansible -m service -a "name=nginx state=started" all -b
