@@ -1,2 +1,2 @@
 # Ansible
-Mentionning all my ansible learnings Here
+This repository documents my hands-on learning journey with Ansible
