@@ -1,0 +1,26 @@
+# Check system uptime 
+ansible all -m command -a "uptime"
+
+# Check disk space
+ansible all -m shell -a "df -h"
+
+# Create directories
+ansible all -m file -a "path=/path/user1/new state=directory mode=755" -b
+
+# Delete directory
+ansible all -m file -a "path=/path/user1/new state=absent" -b
+
+# Copy files
+ansible -m copy -a "src=hosts dest=/tmp/" all -b
+
+# Changing permissions
+ansible -m file -b -a "dest=/tmp/hosts mode=770 owner=ubuntu group=ubuntu" all
+# package installation
+ansible -m apt -a "name=unzip state=present" -b all
+
+# Service starts/restarts
+ansible -m service -a "name=nginx state=started" all -b
+ansible -m service -a "name=nginx state=stopped" all -b
+
+# Service start and enable
+ansible all -m service -a "name=nginx state=started enabled=yes" -b
