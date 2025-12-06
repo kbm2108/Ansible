@@ -1,0 +1,30 @@
+************  Copying Public key of Ansible Control Node to multiple remote ansible managed hosts **************************
+
+# I have AWS instances with the same key-pair
+
+# Create a key pair
+ssh-keygen -t rsa
+
+# Create hosts.ini file and mention all your hosts which you want to manage
+
+[ubuntu_nodes]
+<private_ip> ansible_user=ubuntu ansible_ssh_private_key_file=<AWS_key_pair>
+<private_ip> ansible_user=ubuntu ansible_ssh_private_key_file=<AWS_key_pair>
+
+# Create a playbook
+vi ssh_key.yaml
+
+---
+- name: Copy SSH public key for ubuntu user
+  hosts: ubuntu_nodes
+  gather_facts: no
+
+  tasks:
+    - name: Add controller's public key to managed ansible host authorized_keys
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+# Run the playbook using below command (All hosts should have the same AWS keypair)
+ansible-playbook -i hosts.ini ssh_key.yaml
